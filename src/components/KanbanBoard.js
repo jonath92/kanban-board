@@ -6,20 +6,34 @@ import { useSelector, useDispatch } from 'react-redux'
 import Matrix from './Matrix'
 import Dropzone from './Dropzone'
 import { CATEGORIES } from '../Constants'
+// TODO DraggableTask more generic machen
 import DraggableTaskCard from './DraggableTaskCard'
+import TaskCard from './TaskCard'
 import Cell from './Cell'
+import CustomDragLayer from './CustomDragLayer'
 
 import {
     taskUpdated,
-
+    selectTaskById,
 } from '../slices/tasksSlice'
+
+
 
 export default function KanbanBoard() {
 
     const dispatch = useDispatch()
 
     function handleDrop({ category, id }) {
-        dispatch(taskUpdated({ category, id }))
+        dispatch(taskUpdated(...arguments))
+    }
+
+
+
+    function DragItem({ id }) {
+        const task = useSelector(state => selectTaskById(state, id))
+        return (
+            <TaskCard {...task} />
+        )
     }
 
     const DropzoneWithChildren = ({ category }) => {
@@ -42,22 +56,30 @@ export default function KanbanBoard() {
         )
     }
 
-    return (
-        <Matrix>
-            {CATEGORIES.map(category => {
-                return (
-                    <Cell
-                        title={category}
-                        MainContent={
-                            <DropzoneWithChildren
-                                key={category}
-                                {...{ category }}
-                            />
-                        }
-                    />
 
-                )
-            })}
-        </Matrix>
+
+
+    return (
+        <>
+            <Matrix>
+                {CATEGORIES.map(category => {
+                    return (
+                        <Cell
+                            title={category}
+                            key={category}
+                            MainContent={
+                                <DropzoneWithChildren
+                                    {...{ category }}
+                                />
+                            }
+                        />
+
+                    )
+                })}
+            </Matrix>
+            <CustomDragLayer
+                {...{ DragItem }}
+            />
+        </>
     )
 }

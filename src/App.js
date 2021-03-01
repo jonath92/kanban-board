@@ -1,13 +1,14 @@
 import React from 'react';
 // import { Counter } from './components/Counter';
 import KanbanBoard from './components/KanbanBoard'
-import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DndProvider } from 'react-dnd'
+import { DndProvider } from 'react-dnd-multi-backend';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
+
 import Test from './components/Test';
 
 function App() {
   return (
-    <DndProvider backend={HTML5Backend}>
+    <DndProvider options={HTML5toTouch}>
       <KanbanBoard />
     </DndProvider>
 
