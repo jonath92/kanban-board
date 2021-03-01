@@ -13,5 +13,10 @@ export const tasksSlice = createSlice({
 
 export const { addDummyTask } = tasksSlice.actions;
 
-export const selectAllTasks = state => state.tasks
+
+export const selectTasksByCategory = (state, category) => {
+    const filteredTask = state.tasks.filter(task => task.category = category)
+    return filteredTask
+}
+
 export default tasksSlice.reducer;
