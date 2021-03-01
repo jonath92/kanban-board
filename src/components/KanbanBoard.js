@@ -6,28 +6,32 @@ import { useSelector, useDispatch } from 'react-redux'
 import Matrix from './Matrix'
 import Dropzone from './Dropzone'
 import { CATEGORIES } from '../Constants'
-import TaskCard from './TaskCard'
-
+import DraggableTaskCard from './DraggableTaskCard'
 
 import {
-    addDummyTask,
-    selectTasksByCategory
+    taskUpdated,
+
 } from '../slices/tasksSlice'
 
 export default function KanbanBoard() {
 
+    const dispatch = useDispatch()
+
+
 
     const DropzoneWithChildren = ({ category }) => {
-
         const filteredTasks = useSelector(state =>
-            selectTasksByCategory(state, category)
+            state.tasks.filter((task => task.category === category))
         )
-
         return (
-            <Dropzone>
+            <Dropzone
+                handleDrop={(id) => {
+                    dispatch(taskUpdated({ category: category, id: id }))
+
+                }}>
                 {filteredTasks.map(task => {
                     return (
-                        <TaskCard
+                        <DraggableTaskCard
                             {...task}
                             key={task.id}
                         />

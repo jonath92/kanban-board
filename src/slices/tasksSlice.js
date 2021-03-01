@@ -5,18 +5,19 @@ export const tasksSlice = createSlice({
     name: 'tasks',
     initialState: SAMPLE_TASKS,
     reducers: {
-        addDummyTask: state => {
+        dummyTaskAdded: state => {
             state.push({ category: "DO TODAY", title: "created by reducer" })
+        },
+        taskUpdated(state, action) {
+            const existingTask = state.find(task =>
+                task.id === action.payload.id)
+            Object.assign(existingTask, action.payload)
         }
     }
 })
 
-export const { addDummyTask } = tasksSlice.actions;
+export const { dummyTaskAdded, taskUpdated } = tasksSlice.actions;
 
 
-export const selectTasksByCategory = (state, category) => {
-    const filteredTask = state.tasks.filter(task => task.category = category)
-    return filteredTask
-}
 
 export default tasksSlice.reducer;

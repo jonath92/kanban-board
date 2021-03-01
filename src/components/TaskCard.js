@@ -1,9 +1,12 @@
+// external dependencies
 import React from 'react'
 import styled from 'styled-components/macro'
 import BootstrapCard from 'react-bootstrap/Card';
 
 // styles
-const Card = styled(BootstrapCard)` 
+const Card = styled(BootstrapCard).attrs(({
+    className: "m-4"
+}))` 
     width: 100%;
     cursor: pointer;
 `
