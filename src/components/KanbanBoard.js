@@ -7,6 +7,7 @@ import Matrix from './Matrix'
 import Dropzone from './Dropzone'
 import { CATEGORIES } from '../Constants'
 import DraggableTaskCard from './DraggableTaskCard'
+import Cell from './Cell'
 
 import {
     taskUpdated,
@@ -17,7 +18,9 @@ export default function KanbanBoard() {
 
     const dispatch = useDispatch()
 
-
+    function handleDrop({ category, id }) {
+        dispatch(taskUpdated({ category, id }))
+    }
 
     const DropzoneWithChildren = ({ category }) => {
         const filteredTasks = useSelector(state =>
@@ -25,10 +28,8 @@ export default function KanbanBoard() {
         )
         return (
             <Dropzone
-                handleDrop={(id) => {
-                    dispatch(taskUpdated({ category: category, id: id }))
-
-                }}>
+                onDrop={(id) => handleDrop({ category, id })
+                }>
                 {filteredTasks.map(task => {
                     return (
                         <DraggableTaskCard
@@ -41,15 +42,20 @@ export default function KanbanBoard() {
         )
     }
 
-
     return (
         <Matrix>
             {CATEGORIES.map(category => {
                 return (
-                    <DropzoneWithChildren
-                        key={category}
-                        {...{ category }}
+                    <Cell
+                        title={category}
+                        MainContent={
+                            <DropzoneWithChildren
+                                key={category}
+                                {...{ category }}
+                            />
+                        }
                     />
+
                 )
             })}
         </Matrix>

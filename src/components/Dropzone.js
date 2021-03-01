@@ -15,11 +15,11 @@ const Container = styled.div`
         background-color: ${props => props.isOver ? '#add8e6' : '#f4f3fb'} 
 `
 
-export default function Dropzone({ handleDrop, children }) {
+export default function Dropzone({ onDrop, children }) {
 
     const [{ isOver }, drop] = useDrop({
         accept: DROP_ITEM_TYP,
-        drop: (item) => handleDrop(item.id),
+        drop: (item) => onDrop(item.id),
         collect: (monitor) => ({
             isOver: monitor.isOver()
         })
