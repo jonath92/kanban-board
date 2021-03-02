@@ -1,10 +1,9 @@
 // external dependencies
 import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import styled from 'styled-components/macro'
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
-import { useMount } from 'react-use';
+import { useMount, useLocalStorage } from 'react-use';
 
 // own modules
 import Matrix from './Matrix'
@@ -24,9 +23,8 @@ import {
 
 export default function KanbanBoard() {
 
-    const [editingTask, setEditingTask] = useState(
-        useSelector(state => state.tasks.editing)
-    )
+    const editingTask = useSelector(state => state.tasks.editing)
+
 
     const dispatch = useDispatch()
 
@@ -35,7 +33,8 @@ export default function KanbanBoard() {
     }
 
     function handlePlusClick() {
-        setEditingTask("hi")
+        // dispatch(editingTaskInitialized())
+        // setEditingTask("hi")
     }
 
 
@@ -111,7 +110,9 @@ export default function KanbanBoard() {
                 </Matrix>
                 <CustomDragLayer {...{ DragItem }} />
             </DndProvider>
-            {editingTask && <AddEditTaskModal show={editingTask} />}
+            {editingTask &&
+                <AddEditTaskModal
+                />}
         </>
     )
 }

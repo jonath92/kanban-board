@@ -27,7 +27,7 @@ export const SAMPLE_TASKS = [
     }
 ]
 
-export const LOCAL_STORAGE_PREFIX = 'todo-board'
+export const LOCAL_STORAGE_NAMESPACE = 'todo-board'
 
 // This is needed for React DND. IMHO it is totaly useless when there is only one draggable type
 export const DROP_ITEM_TYP = "card"

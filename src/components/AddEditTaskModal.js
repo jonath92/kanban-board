@@ -6,15 +6,23 @@ import { useMount, useLocalStorage } from 'react-use';
 export default function AddEditTaskModal(props) {
 
     const {
-        showInitial
+        showInitial,
+        onChange,
+        onSave,
+        header
     } = props
 
-    const [show, setShow] = useState(true)
 
+    function handleClose() {
+        console.log("hi")
+    }
 
     return (
         <Modal
-            show={show}
+            show={true}
+            size="lg"
+            centered
+            onHide={() => handleClose()}
         >
             hi
         </Modal>

@@ -5,8 +5,7 @@ import { save, load } from "redux-localstorage-simple"
 
 // own modules
 import tasksReducer from './slices/tasksSlice';
-
-const LOCAL_STORAGE_NAMESPACE = "todo-board"
+import { LOCAL_STORAGE_NAMESPACE } from './Constants'
 
 
 export default configureStore({
