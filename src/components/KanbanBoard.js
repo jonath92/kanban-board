@@ -1,10 +1,10 @@
 // external dependencies
-import React from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components/macro'
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
-import { useMount, useLocalStorage } from 'react-use';
+import { useMount } from 'react-use';
 
 // own modules
 import Matrix from './Matrix'
@@ -19,15 +19,25 @@ import AddEditTaskModal from './AddEditTaskModal'
 import {
     taskUpdated,
     selectTaskById,
+    selectTaskByCategory
 } from '../slices/tasksSlice'
 
 export default function KanbanBoard() {
+
+    const [editingTask, setEditingTask] = useState(
+        useSelector(state => state.tasks.editing)
+    )
 
     const dispatch = useDispatch()
 
     function handleDrop({ category, id }) {
         dispatch(taskUpdated(...arguments))
     }
+
+    function handlePlusClick() {
+        setEditingTask("hi")
+    }
+
 
     //  The Item shown on the custom layer when dragging
     function DragItem({ id }) {
@@ -52,9 +62,9 @@ export default function KanbanBoard() {
     }
 
     const DropzoneWithChildren = ({ category }) => {
-        const filteredTasks = useSelector(state =>
-            state.tasks.filter((task => task.category === category))
-        )
+
+        const filteredTasks = useSelector(state => selectTaskByCategory(state, category))
+
         return (
             <Dropzone onDrop={
                 (id) => handleDrop({ category, id })
@@ -79,6 +89,7 @@ export default function KanbanBoard() {
                         <Cell
                             title={category}
                             key={category}
+                            onPlusClick={handlePlusClick}
                             MainContent={
                                 <DropzoneWithChildren
                                     {...{ category }}
@@ -100,7 +111,7 @@ export default function KanbanBoard() {
                 </Matrix>
                 <CustomDragLayer {...{ DragItem }} />
             </DndProvider>
-            <AddEditTaskModal />
+            {editingTask && <AddEditTaskModal show={editingTask} />}
         </>
     )
 }

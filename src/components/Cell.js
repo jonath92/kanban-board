@@ -34,15 +34,20 @@ const Title = styled.h4.attrs(({
      }
 `
 
-export default function Cell({ title, MainContent }) {
+export default function Cell(props) {
 
+    const {
+        title,
+        MainContent,
+        onPlusClick
+    } = props
 
 
     return (
         <Container>
             <Header>
                 <Title>{title}</Title>
-                <PlusIcon onClick={() => console.log(title)} />
+                <PlusIcon onClick={() => onPlusClick()} />
             </Header>
             {MainContent}
         </Container>)
