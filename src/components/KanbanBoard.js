@@ -1,23 +1,25 @@
 // external dependencies
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import styled from 'styled-components/macro'
+import { DndProvider } from 'react-dnd-multi-backend';
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
+import { useMount, useLocalStorage } from 'react-use';
 
 // own modules
 import Matrix from './Matrix'
 import Dropzone from './Dropzone'
 import { CATEGORIES } from '../Constants'
-// TODO DraggableTask more generic machen
-import DraggableTaskCard from './DraggableTaskCard'
+import DraggableItem from './DraggableItem'
 import TaskCard from './TaskCard'
 import Cell from './Cell'
 import CustomDragLayer from './CustomDragLayer'
+import AddEditTaskModal from './AddEditTaskModal'
 
 import {
     taskUpdated,
     selectTaskById,
 } from '../slices/tasksSlice'
-
-
 
 export default function KanbanBoard() {
 
@@ -27,12 +29,25 @@ export default function KanbanBoard() {
         dispatch(taskUpdated(...arguments))
     }
 
-
-
+    //  The Item shown on the custom layer when dragging
     function DragItem({ id }) {
         const task = useSelector(state => selectTaskById(state, id))
         return (
             <TaskCard {...task} />
+        )
+    }
+
+    function DraggableTaskCard(props) {
+        const { id, ...otherProps } = props
+
+        return (
+            <DraggableItem
+                {...{ id }}
+                style={{ width: "90%" }}
+                className="py-4 py-md-3"
+            >
+                <TaskCard {...otherProps} />
+            </DraggableItem>
         )
     }
 
@@ -41,9 +56,9 @@ export default function KanbanBoard() {
             state.tasks.filter((task => task.category === category))
         )
         return (
-            <Dropzone
-                onDrop={(id) => handleDrop({ category, id })
-                }>
+            <Dropzone onDrop={
+                (id) => handleDrop({ category, id })
+            }>
                 {filteredTasks.map(task => {
                     return (
                         <DraggableTaskCard
@@ -56,12 +71,9 @@ export default function KanbanBoard() {
         )
     }
 
-
-
-
-    return (
-        <>
-            <Matrix>
+    const CellGroup = () => {
+        return (
+            <>
                 {CATEGORIES.map(category => {
                     return (
                         <Cell
@@ -76,10 +88,19 @@ export default function KanbanBoard() {
 
                     )
                 })}
-            </Matrix>
-            <CustomDragLayer
-                {...{ DragItem }}
-            />
+            </>
+        )
+    }
+
+    return (
+        <>
+            <DndProvider options={HTML5toTouch}>
+                <Matrix>
+                    <CellGroup />
+                </Matrix>
+                <CustomDragLayer {...{ DragItem }} />
+            </DndProvider>
+            <AddEditTaskModal />
         </>
     )
 }

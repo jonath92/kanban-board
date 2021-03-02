@@ -1,10 +1,11 @@
+// external dependencies
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// own modules
 import App from './App';
-import store from './store2';
+import store from './store';
 import { Provider } from 'react-redux';
 
 
