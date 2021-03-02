@@ -4,16 +4,18 @@ import { useSelector, useDispatch } from 'react-redux'
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
 import { useMount, useLocalStorage } from 'react-use';
+import { v4 as uuidv4 } from 'uuid';
 
 // own modules
 import Matrix from './Matrix'
 import Dropzone from './Dropzone'
-import { CATEGORIES } from '../Constants'
+import { CATEGORIES, LOCAL_STORAGE_NAMESPACE } from '../Constants'
 import DraggableItem from './DraggableItem'
 import TaskCard from './TaskCard'
 import Cell from './Cell'
 import CustomDragLayer from './CustomDragLayer'
 import AddEditTaskModal from './AddEditTaskModal'
+
 
 import {
     taskUpdated,
@@ -23,8 +25,7 @@ import {
 
 export default function KanbanBoard() {
 
-    const editingTask = useSelector(state => state.tasks.editing)
-
+    const [editingTask, setEditingTask] = useLocalStorage(`${LOCAL_STORAGE_NAMESPACE}_editing`, null)
 
     const dispatch = useDispatch()
 
@@ -33,8 +34,17 @@ export default function KanbanBoard() {
     }
 
     function handlePlusClick() {
+        setEditingTask({
+            type: "New Task"
+        })
         // dispatch(editingTaskInitialized())
         // setEditingTask("hi")
+    }
+
+    function handelModalInputChange(change) {
+        const editingUpdated = { ...editingTask, ...change }
+        // console.log(editingUpdated)
+        setEditingTask(editingUpdated)
     }
 
 
@@ -102,6 +112,18 @@ export default function KanbanBoard() {
         )
     }
 
+
+    function renderModal() {
+        const { type, id, ...otherProps } = editingTask
+        return (
+            <AddEditTaskModal
+                onChange={handelModalInputChange}
+                title={type}
+            />
+
+        )
+    }
+
     return (
         <>
             <DndProvider options={HTML5toTouch}>
@@ -110,9 +132,7 @@ export default function KanbanBoard() {
                 </Matrix>
                 <CustomDragLayer {...{ DragItem }} />
             </DndProvider>
-            {editingTask &&
-                <AddEditTaskModal
-                />}
+            {editingTask && renderModal()}
         </>
     )
 }
