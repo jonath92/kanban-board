@@ -1,5 +1,5 @@
 // external dependencies
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { DndProvider } from 'react-dnd-multi-backend';
 import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
@@ -25,7 +25,8 @@ import {
 
 export default function KanbanBoard() {
 
-    const [editingTask, setEditingTask] = useLocalStorage(`${LOCAL_STORAGE_NAMESPACE}_editing`, null)
+    // it is true in the beginning as we don't know if the content of the modal has been saved to the localStorage in the previous session (Modal has to handle that case byitself)
+    const [editingTask, setEditingTask] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -34,18 +35,12 @@ export default function KanbanBoard() {
     }
 
     function handlePlusClick() {
-        setEditingTask({
-            type: "New Task"
-        })
+        setEditingTask({ title: "hi" })
+
         // dispatch(editingTaskInitialized())
         // setEditingTask("hi")
     }
 
-    function handelModalInputChange(change) {
-        const editingUpdated = { ...editingTask, ...change }
-        // console.log(editingUpdated)
-        setEditingTask(editingUpdated)
-    }
 
 
     //  The Item shown on the custom layer when dragging
@@ -114,13 +109,14 @@ export default function KanbanBoard() {
 
 
     function renderModal() {
-        const { type, id, ...otherProps } = editingTask
+        // const { type, id, ...otherProps } = editingTask
         return (
-            <AddEditTaskModal
-                onChange={handelModalInputChange}
-                title={type}
-            />
 
+            <AddEditTaskModal
+                modalTitleInitial="New Task"
+                {...{ LOCAL_STORAGE_NAMESPACE }}
+                editingTaskInitial={editingTask}
+            />
         )
     }
 
@@ -132,7 +128,8 @@ export default function KanbanBoard() {
                 </Matrix>
                 <CustomDragLayer {...{ DragItem }} />
             </DndProvider>
-            {editingTask && renderModal()}
+
+            {renderModal()}
         </>
     )
 }
