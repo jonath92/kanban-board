@@ -4,6 +4,7 @@ import BootstrapModal from 'react-bootstrap/Modal'
 import { useMount, useLocalStorage } from 'react-use';
 import styled from 'styled-components/macro'
 import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 // own modules
 
 // constants
@@ -13,7 +14,7 @@ const LOCAL_STORAGE_SUB_NAMESPACE = 'addEditTaskModal'
 // styles
 const Modal = styled(BootstrapModal).attrs(({
     backdrop: "static",  //Modal doesn't close when clicking outside of it
-    centered: true
+    centered: true,
 }))`
 
 `
@@ -47,8 +48,11 @@ export default function AddEditTaskModal(props) {
     )
 
     useEffect(() => {
-        saveInitialValueToLocalStorage(editingTaskInitial)
-        saveCurrentValueToLocalStorage(editingTaskInitial)
+        // this ensures that the storage value is updated when the inital Value is set .
+        if (editingTaskInitial) {
+            saveInitialValueToLocalStorage(editingTaskInitial)
+            saveCurrentValueToLocalStorage(editingTaskInitial)
+        }
     }, [editingTaskInitial])
 
 
@@ -57,21 +61,50 @@ export default function AddEditTaskModal(props) {
         saveCurrentValueToLocalStorage(modifiedValue)
     }
 
+    function handleClose() {
+        removeInitialValueFromLocalStorage()
+        removeCurrentValueFromLocalStorage()
+    }
+
+    function handleSubmit() {
+        console.log("hier weiter machen")
+    }
+
     return (
         <Modal
             show={initialValue ? true : false}
+            onHide={handleClose}
         >
             <Modal.Header closeButton>
-                <Modal.Title>{modalTitleInitial}</Modal.Title>
+                <Modal.Title>{currentValue?.type ?? ''}</Modal.Title>
             </Modal.Header>
 
+            <Modal.Body>
 
-            <input
-                // This is a Nullish coalescing (??) and an OptionalChaining(?) operator 
-                value={currentValue?.title ?? ''}
-                onChange={(e) => handleChange({ title: e.target.value })}
+                <Form.Group>
+                    <Form.Label>Title</Form.Label>
+                    <Form.Control
+                        placeholder="Enter a Title"
+                        // This is a Nullish coalescing (??) and an OptionalChaining(?) operator 
+                        defaultValue={currentValue?.title ?? ''}
+                        onChange={(e) => handleChange({ title: e.target.value })}
+                        required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                        Please provide a title
+                        </Form.Control.Feedback>
+                </Form.Group>
 
-            />
+            </Modal.Body>
+
+            <Modal.Footer>
+                <Button
+                    type="submit"
+                    onClick={handleSubmit}
+                >Save Task</Button>
+
+            </Modal.Footer>
+
         </Modal>
     )
 }

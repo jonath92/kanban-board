@@ -25,7 +25,7 @@ import {
 
 export default function KanbanBoard() {
 
-    const [modalContent, setModalContent] = useState({ type: null, editingTask: null })
+    const [editingTask, setEditingTask] = useState(null)
 
     const dispatch = useDispatch()
 
@@ -34,11 +34,9 @@ export default function KanbanBoard() {
     }
 
     function handlePlusClick() {
-        setModalContent({
+        setEditingTask({
             type: "New Task",
-            editingTask: {
-                title: "hi"
-            }
+            title: "hi",
         })
 
         // dispatch(editingTaskInitialized())
@@ -117,8 +115,7 @@ export default function KanbanBoard() {
         return (
 
             <AddEditTaskModal
-                modalTitleInitial={modalContent.type}
-                editingTaskInitial={modalContent.editingTask}
+                editingTaskInitial={editingTask}
                 {...{ LOCAL_STORAGE_NAMESPACE }}
             />
         )
