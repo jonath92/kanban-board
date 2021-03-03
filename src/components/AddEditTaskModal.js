@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import BootstrapModal from 'react-bootstrap/Modal'
 import { useMount, useLocalStorage } from 'react-use';
 import styled from 'styled-components/macro'
-
+import Form from 'react-bootstrap/Form'
 // own modules
 
 // constants
@@ -22,7 +22,8 @@ export default function AddEditTaskModal(props) {
 
     const {
         editingTaskInitial,
-        LOCAL_STORAGE_NAMESPACE
+        LOCAL_STORAGE_NAMESPACE,
+        modalTitleInitial
     } = props
 
 
@@ -51,32 +52,20 @@ export default function AddEditTaskModal(props) {
     }, [editingTaskInitial])
 
 
-    const [count, setCount] = useLocalStorage("testi", 0)
-    const increment = () => setCount(count + 1)
-
     function handleChange(change) {
         const modifiedValue = { ...currentValue, ...change }
         saveCurrentValueToLocalStorage(modifiedValue)
     }
 
-    // const Modal = (props) => {
-
-    //     return (
-    //         <BootstrapModal
-    //             show={initialValue ? true : false}
-    //         >
-    //             {props.children}
-    //         </BootstrapModal>
-    //     )
-    // }
-
-
     return (
         <Modal
-            show
+            show={initialValue ? true : false}
         >
-            <button onClick={increment}>{count}</button>
-            <div>lorem</div>
+            <Modal.Header closeButton>
+                <Modal.Title>{modalTitleInitial}</Modal.Title>
+            </Modal.Header>
+
+
             <input
                 // This is a Nullish coalescing (??) and an OptionalChaining(?) operator 
                 value={currentValue?.title ?? ''}

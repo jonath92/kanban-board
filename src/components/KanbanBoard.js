@@ -25,8 +25,7 @@ import {
 
 export default function KanbanBoard() {
 
-    // it is true in the beginning as we don't know if the content of the modal has been saved to the localStorage in the previous session (Modal has to handle that case byitself)
-    const [editingTask, setEditingTask] = useState(null)
+    const [modalContent, setModalContent] = useState({ type: null, editingTask: null })
 
     const dispatch = useDispatch()
 
@@ -35,7 +34,12 @@ export default function KanbanBoard() {
     }
 
     function handlePlusClick() {
-        setEditingTask({ title: "hi" })
+        setModalContent({
+            type: "New Task",
+            editingTask: {
+                title: "hi"
+            }
+        })
 
         // dispatch(editingTaskInitialized())
         // setEditingTask("hi")
@@ -113,9 +117,9 @@ export default function KanbanBoard() {
         return (
 
             <AddEditTaskModal
-                modalTitleInitial="New Task"
+                modalTitleInitial={modalContent.type}
+                editingTaskInitial={modalContent.editingTask}
                 {...{ LOCAL_STORAGE_NAMESPACE }}
-                editingTaskInitial={editingTask}
             />
         )
     }
