@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useDragLayer } from 'react-dnd';
 import styled from 'styled-components/macro'

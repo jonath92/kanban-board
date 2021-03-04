@@ -1,10 +1,9 @@
 // external dependencies
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { DndProvider } from 'react-dnd-multi-backend';
-import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch';
-import { useMount, useLocalStorage } from 'react-use';
-import { v4 as uuidv4 } from 'uuid';
+import { useLocalStorage } from 'react-use';
+import { DndProvider } from 'react-dnd-multi-backend'
+import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch'
 
 // own modules
 import Matrix from './Matrix'
@@ -14,35 +13,68 @@ import DraggableItem from './DraggableItem'
 import TaskCard from './TaskCard'
 import Cell from './Cell'
 import CustomDragLayer from './CustomDragLayer'
-import AddEditTaskModal from './AddEditTaskModal'
-
-
+import AddEditModal from './AddEditModal'
+import AddEditTaskForm from './AddEditTaskForm'
 import {
     taskUpdated,
     selectTaskById,
     selectTaskByCategory
 } from '../slices/tasksSlice'
 
+// constants
+const LOCAL_STORAGE_EDITING_TASK = '_editing_task'
+
 export default function KanbanBoard() {
 
-    const [editingTask, setEditingTask] = useState(null)
-
     const dispatch = useDispatch()
+
+    const [modalCondition, setModalCondition] = useState("")
+
+    // The initial and the current value are saved to the local Storage to ensure that it can be determined whether a Discard Prompt shall be shown when closing or not - even when the browser has been refreshed
+    const [
+        editingTaskInitial,
+        setEditingTaskInitial,
+        clearEditingTaskInitial
+    ] = useLocalStorage(
+        `${LOCAL_STORAGE_NAMESPACE}${LOCAL_STORAGE_EDITING_TASK}_initial`,
+        null
+    )
+
+    const [
+        editingTaskCurrent,
+        setEditingTaskCurrent,
+        clearEditingTaskCurrent
+    ] = useLocalStorage(
+        `${LOCAL_STORAGE_NAMESPACE}${LOCAL_STORAGE_EDITING_TASK}_current`,
+        null
+    )
+
 
     function handleDrop({ category, id }) {
         dispatch(taskUpdated(...arguments))
     }
 
     function handlePlusClick() {
-        setEditingTask({
-            type: "New Task",
-            title: "hi",
-        })
 
+        const editingTask = {
+            title: "hi",
+        }
+
+        setEditingTaskInitial(editingTask)
+        setEditingTaskCurrent(editingTask)
+        setModalCondition("NEW")
         // dispatch(editingTaskInitialized())
         // setEditingTask("hi")
     }
 
+    function handleFormChange(change) {
+        const modifiedValue = { ...editingTaskCurrent, ...change }
+        setEditingTaskCurrent(modifiedValue)
+    }
+
+    function handleModalCloseAttempt() {
+        setModalCondition("DISCARD")
+    }
 
 
     //  The Item shown on the custom layer when dragging
@@ -109,18 +141,6 @@ export default function KanbanBoard() {
         )
     }
 
-
-    function renderModal() {
-        // const { type, id, ...otherProps } = editingTask
-        return (
-
-            <AddEditTaskModal
-                editingTaskInitial={editingTask}
-                {...{ LOCAL_STORAGE_NAMESPACE }}
-            />
-        )
-    }
-
     return (
         <>
             <DndProvider options={HTML5toTouch}>
@@ -130,7 +150,19 @@ export default function KanbanBoard() {
                 <CustomDragLayer {...{ DragItem }} />
             </DndProvider>
 
-            {renderModal()}
+            <AddEditModal
+                show={Boolean(editingTaskInitial)}
+                condition={modalCondition}
+                onCloseAttempt={handleModalCloseAttempt}
+
+            >
+                <AddEditTaskForm
+                    {...editingTaskInitial}
+                    onChange={handleFormChange}
+                />
+
+            </AddEditModal>
+
         </>
     )
 }
