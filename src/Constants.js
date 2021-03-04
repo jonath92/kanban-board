@@ -1,5 +1,5 @@
 export const CATEGORIES = [
-    "DO TODAY", "BACKLOG", "KEEP TRACK", "IDEAS"
+    "Do Today", "Backlog", "Keep Track", "Ideas"
 ]
 
 export const SAMPLE_TASKS = [

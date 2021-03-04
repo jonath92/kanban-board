@@ -37,8 +37,8 @@ const Title = styled.h4.attrs(({
 export default function Cell(props) {
 
     const {
-        title,
-        MainContent,
+        category,
+        children, //Dropzone
         onPlusClick
     } = props
 
@@ -46,9 +46,9 @@ export default function Cell(props) {
     return (
         <Container>
             <Header>
-                <Title>{title}</Title>
-                <PlusIcon onClick={() => onPlusClick()} />
+                <Title>{category.toUpperCase()}</Title>
+                <PlusIcon onClick={() => onPlusClick(category)} />
             </Header>
-            {MainContent}
+            {children}
         </Container>)
 }

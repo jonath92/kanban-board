@@ -1,10 +1,23 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { SAMPLE_TASKS } from '../Constants'
 
 export const tasksSlice = createSlice({
     name: 'tasks',
     initialState: SAMPLE_TASKS,
     reducers: {
+        taskAdded: {
+            reducer(state, action) {
+                state.push(action.payload)
+            },
+            prepare(newTask) {
+                return {
+                    payload: {
+                        id: nanoid(),
+                        ...newTask
+                    }
+                }
+            }
+        },
         taskUpdated(state, action) {
             const existingTask = state.find(task =>
                 task.id === action.payload.id)
@@ -13,7 +26,7 @@ export const tasksSlice = createSlice({
     }
 })
 
-export const { taskUpdated } = tasksSlice.actions;
+export const { taskUpdated, taskAdded } = tasksSlice.actions;
 
 
 export const selectTaskById = (state, taskId) =>

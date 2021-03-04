@@ -20,10 +20,10 @@ export default function TaskCard(props) {
     const {
         title,
         description,
-        handleCardClicked } = props
+        onClick } = props
 
     return (
-        <Card onClick={() => handleCardClicked()}>
+        <Card onClick={() => onClick()}>
             <CardTitle>
                 {title}
             </CardTitle>
