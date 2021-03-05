@@ -55,11 +55,13 @@ export default function AddEditModal(props) {
 
         setEditingTaskInitial(editingTask)
         setEditingTaskCurrent(editingTask)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editingTask]) // executed when editing task changed from parent
 
     useEffect(() => {
         if (!editingTaskInitial) return
         setCondition(getType())
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [editingTaskInitial]) // executed when editing task changed from parent or when read from local Storage (i.e on Browser refresh)
 
 

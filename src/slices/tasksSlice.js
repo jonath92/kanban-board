@@ -5,17 +5,31 @@ export const tasksSlice = createSlice({
     name: 'tasks',
     initialState: SAMPLE_TASKS,
     reducers: {
-        taskAdded: {
+        // put like in HTTP - updates or create new
+        taskPutted: {
             reducer(state, action) {
-                state.push(action.payload)
+                if (action.payload.type === 'Add') {
+                    state.push(action.payload.task)
+                } else {
+                    tasksSlice.caseReducers.taskUpdated(
+                        state,
+                        { payload: action.payload.task }
+                    )
+                }
+
             },
-            prepare(newTask) {
-                return {
-                    payload: {
-                        id: nanoid(),
-                        ...newTask
+            prepare(newUpdatedTask) {
+
+                let payload
+                if (newUpdatedTask.id) {
+                    payload = { type: 'Update', task: newUpdatedTask }
+                } else {
+                    payload = {
+                        type: 'Add',
+                        task: { id: nanoid(), ...newUpdatedTask }
                     }
                 }
+                return { ...{ payload } }
             }
         },
         taskUpdated(state, action) {
@@ -23,10 +37,11 @@ export const tasksSlice = createSlice({
                 task.id === action.payload.id)
             Object.assign(existingTask, action.payload)
         }
+
     }
 })
 
-export const { taskUpdated, taskAdded } = tasksSlice.actions;
+export const { taskPutted, taskUpdated } = tasksSlice.actions;
 
 
 export const selectTaskById = (state, taskId) =>

@@ -12,12 +12,6 @@ const Layer = styled.div`
     width: 100%;
     height: 100%
 `
-
-const MovableItem = styled.div` 
-    transform: translate(${props => props.x}px ${props => props.y}px);
-    width: ${props => props.width}
-
-`
 export default function CustomDragLayer({ DragItem }) {
 
     const { isDragging, item, currentOffset } = useDragLayer((monitor) => ({

@@ -7,7 +7,7 @@ import HTML5toTouch from 'react-dnd-multi-backend/dist/esm/HTML5toTouch'
 // own modules
 import Matrix from './Matrix'
 import Dropzone from './Dropzone'
-import { CATEGORIES, LOCAL_STORAGE_NAMESPACE } from '../Constants'
+import { CATEGORIES } from '../Constants'
 import DraggableItem from './DraggableItem'
 import TaskCard from './TaskCard'
 import Cell from './Cell'
@@ -15,10 +15,10 @@ import CustomDragLayer from './CustomDragLayer'
 import AddEditModal from './AddEditModal'
 
 import {
-    taskUpdated,
     selectTaskById,
     selectTaskByCategory,
-    taskAdded
+    taskPutted,
+    taskUpdated
 } from '../slices/tasksSlice'
 
 
@@ -103,7 +103,7 @@ export default function KanbanBoard() {
             </DndProvider>
             <AddEditModal
                 {...{ editingTask }}
-                onSave={(editingTask) => dispatch(taskAdded(editingTask))}
+                onSave={(editingTask) => dispatch(taskPutted(editingTask))}
                 onClose={() => setEditingTask(null)}
             />
         </>
