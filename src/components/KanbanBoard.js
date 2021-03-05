@@ -18,7 +18,8 @@ import {
     selectTaskById,
     selectTaskByCategory,
     taskPutted,
-    taskUpdated
+    taskUpdated,
+    taskDeleted
 } from '../slices/tasksSlice'
 
 
@@ -105,6 +106,7 @@ export default function KanbanBoard() {
                 {...{ editingTask }}
                 onSave={(editingTask) => dispatch(taskPutted(editingTask))}
                 onClose={() => setEditingTask(null)}
+                onDelete={(id) => dispatch(taskDeleted(id))}
             />
         </>
     )

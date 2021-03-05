@@ -22,7 +22,8 @@ export default function AddEditModal(props) {
     const {
         editingTask,
         onSave,
-        onClose
+        onClose,
+        onDelete
     } = props
 
 
@@ -77,7 +78,7 @@ export default function AddEditModal(props) {
             title: "Edit Task",
             showCloseIcon: true,
             renderBodyContent: renderForm,
-            footerBtnsRenderer: [renderSaveBtn]
+            footerBtnsRenderer: [renderDeleteBtn, renderSaveBtn]
 
         }],
         ['DISCARD', {
@@ -85,6 +86,12 @@ export default function AddEditModal(props) {
             showCloseIcon: false,
             renderBodyContent: () => "Discard Changes",
             footerBtnsRenderer: [renderCancelBtn, renderDiscardBtn]
+        }],
+        ['DELETE', {
+            title: "Are you sure?",
+            showCloseIcon: false,
+            renderBodyContent: () => "Delete Task",
+            footerBtnsRenderer: [renderCancelBtn, renderDeleteBtn]
         }]
     ])
 
@@ -126,6 +133,15 @@ export default function AddEditModal(props) {
         closeModal()
     }
 
+    function handleDelete() {
+        if (condition !== 'DELETE') {
+            setCondition('DELETE')
+            return
+        }
+        onDelete({ id: editingTaskCurrent.id })
+        closeModal()
+    }
+
 
     function renderForm() {
         return (
@@ -158,6 +174,19 @@ export default function AddEditModal(props) {
                 onClick={handleSubmit}
             >
                 Save Task
+            </Button>
+        )
+    }
+
+
+    function renderDeleteBtn() {
+        return (
+            <Button
+                variant="danger"
+                key="danger"
+                onClick={handleDelete}
+            >
+                {condition === 'DELETE' ? "Delete" : 'Delete Task'}
             </Button>
         )
     }

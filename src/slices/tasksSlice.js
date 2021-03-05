@@ -36,12 +36,14 @@ export const tasksSlice = createSlice({
             const existingTask = state.find(task =>
                 task.id === action.payload.id)
             Object.assign(existingTask, action.payload)
+        },
+        taskDeleted(state, action) {
+            return state.filter(task => task.id !== action.payload.id)
         }
-
     }
 })
 
-export const { taskPutted, taskUpdated } = tasksSlice.actions;
+export const { taskPutted, taskUpdated, taskDeleted } = tasksSlice.actions;
 
 
 export const selectTaskById = (state, taskId) =>
