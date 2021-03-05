@@ -30,7 +30,7 @@ export default function CustomDragLayer({ DragItem }) {
     }, [currentOffset])
 
     useEffect(() => {
-        if (isDragging) {
+        if (isDragging && item) {
             setWidth(item.getWidth())
         }
     }, [isDragging, item])

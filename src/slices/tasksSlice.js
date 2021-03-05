@@ -16,10 +16,9 @@ export const tasksSlice = createSlice({
                         { payload: action.payload.task }
                     )
                 }
-
             },
-            prepare(newUpdatedTask) {
 
+            prepare(newUpdatedTask) {
                 let payload
                 if (newUpdatedTask.id) {
                     payload = { type: 'Update', task: newUpdatedTask }
@@ -33,9 +32,21 @@ export const tasksSlice = createSlice({
             }
         },
         taskUpdated(state, action) {
-            const existingTask = state.find(task =>
-                task.id === action.payload.id)
-            Object.assign(existingTask, action.payload)
+
+            const updatedTask = action.payload
+
+            const index = state.findIndex(task => task.id === updatedTask.id)
+            const existingTask = state[index]
+
+            const categoryChanged = (existingTask.category !== updatedTask.category)
+            Object.assign(existingTask, updatedTask)
+
+            // moving element to end if category has changed
+            if (categoryChanged) {
+                return void (state.push(state.splice(index, 1)[0]))
+            }
+
+
         },
         taskDeleted(state, action) {
             return state.filter(task => task.id !== action.payload.id)
