@@ -5,25 +5,23 @@ export const CATEGORIES = [
 export const SAMPLE_TASKS = [
     {
         "category": CATEGORIES[0],
-        "title": "Make Homework",
-        "id": "c1d9c8c5-8273-4723-bb2f-6ab0a8abb979"
-    },
-    {
-        "category": CATEGORIES[0],
         "title": "Have Fun",
         "description": "Swimming or going to the cinema?",
-        "id": "6fc7709c-198c-4103-8712-d3bfab106862"
     },
     {
-        "category": CATEGORIES[0],
-        "title": "Make Homework",
-        "id": "c5d9c8c5-8273-4723-bb2f-6ab0a8abb979"
+        "category": CATEGORIES[1],
+        "title": "Learn Typescript",
+        "description": 'Good getting started guide: https://create-react-app.dev/docs/adding-typescript/',
+
     },
     {
-        "category": CATEGORIES[0],
-        "title": "Have Fun",
-        "description": "Swimming or going to the cinema?",
-        "id": "68fc7709c-198c-4103-8712-d3bfab106862"
+        "category": CATEGORIES[2],
+        "title": "Ordered a new Smartphone online",
+        "description": "Should arrive tomorrow",
+    },
+    {
+        "category": CATEGORIES[3],
+        "title": "Migrate to Nextcloud"
     }
 ]
 

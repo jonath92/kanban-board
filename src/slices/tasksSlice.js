@@ -1,9 +1,13 @@
 import { createSlice, nanoid } from '@reduxjs/toolkit';
 import { SAMPLE_TASKS } from '../Constants'
 
+const initalTasksWithID = SAMPLE_TASKS.map(task => {
+    return { ...task, id: nanoid() }
+})
+
 export const tasksSlice = createSlice({
     name: 'tasks',
-    initialState: SAMPLE_TASKS,
+    initialState: initalTasksWithID,
     reducers: {
         // put like in HTTP - updates or create new
         taskPutted: {
