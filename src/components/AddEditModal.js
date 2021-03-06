@@ -16,7 +16,6 @@ const Modal = styled(BootstrapModal).attrs(({
     centered: true,
 }))``
 
-
 export default function AddEditModal(props) {
 
     const {
@@ -107,7 +106,6 @@ export default function AddEditModal(props) {
         onClose()
     }
 
-
     function handleFormChange(change) {
         const modifiedValue = { ...editingTaskCurrent, ...change }
         const modifiedValueWithoutEmptyString = pickBy(
@@ -141,7 +139,6 @@ export default function AddEditModal(props) {
         onDelete({ id: editingTaskCurrent.id })
         closeModal()
     }
-
 
     function renderForm() {
         return (
@@ -177,7 +174,6 @@ export default function AddEditModal(props) {
             </Button>
         )
     }
-
 
     function renderDeleteBtn() {
         return (

@@ -31,7 +31,9 @@ export default function CustomDragLayer({ DragItem }) {
 
     useEffect(() => {
         if (isDragging && item) {
-            setWidth(item.getWidth())
+            try {
+                setWidth(item.getWidth())
+            } catch { } // for some reasons it is sometimes thrown "getWidth is not a function". In that case it is used 0
         }
     }, [isDragging, item])
 
